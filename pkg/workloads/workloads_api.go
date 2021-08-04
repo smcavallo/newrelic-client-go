@@ -3,6 +3,7 @@ package workloads
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/newrelic/newrelic-client-go/pkg/entities"
 )
@@ -33,6 +34,15 @@ func (a *Workloads) WorkloadCreateWithContext(
 
 	if err := a.client.NerdGraphQueryWithContext(ctx, WorkloadCreateMutation, vars, &resp); err != nil {
 		return nil, err
+	}
+
+	// If we got errors back, wrap them all up
+	if len(resp.WorkloadCreateResult.Errors) > 0 {
+		errs := fmt.Errorf("query error")
+		for _, err := range resp.WorkloadCreateResult.Errors {
+			errs = fmt.Errorf("%w; %s", errs, err.Description)
+		}
+		return nil, errs
 	}
 
 	return &resp.WorkloadCollection, nil
@@ -149,6 +159,15 @@ func (a *Workloads) WorkloadDeleteWithContext(
 
 	if err := a.client.NerdGraphQueryWithContext(ctx, WorkloadDeleteMutation, vars, &resp); err != nil {
 		return nil, err
+	}
+
+	// If we got errors back, wrap them all up
+	if len(resp.WorkloadDeleteResult.Errors) > 0 {
+		errs := fmt.Errorf("query error")
+		for _, err := range resp.WorkloadDeleteResult.Errors {
+			errs = fmt.Errorf("%w; %s", errs, err.Description)
+		}
+		return nil, errs
 	}
 
 	return &resp.WorkloadCollection, nil
@@ -273,6 +292,15 @@ func (a *Workloads) WorkloadDuplicateWithContext(
 		return nil, err
 	}
 
+	// If we got errors back, wrap them all up
+	if len(resp.WorkloadDuplicateResult.Errors) > 0 {
+		errs := fmt.Errorf("query error")
+		for _, err := range resp.WorkloadDuplicateResult.Errors {
+			errs = fmt.Errorf("%w; %s", errs, err.Description)
+		}
+		return nil, errs
+	}
+
 	return &resp.WorkloadCollection, nil
 }
 
@@ -393,6 +421,15 @@ func (a *Workloads) WorkloadUpdateWithContext(
 
 	if err := a.client.NerdGraphQueryWithContext(ctx, WorkloadUpdateMutation, vars, &resp); err != nil {
 		return nil, err
+	}
+
+	// If we got errors back, wrap them all up
+	if len(resp.WorkloadUpdateResult.Errors) > 0 {
+		errs := fmt.Errorf("query error")
+		for _, err := range resp.WorkloadUpdateResult.Errors {
+			errs = fmt.Errorf("%w; %s", errs, err.Description)
+		}
+		return nil, errs
 	}
 
 	return &resp.WorkloadCollection, nil

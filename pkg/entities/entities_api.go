@@ -3,6 +3,7 @@ package entities
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/newrelic/newrelic-client-go/pkg/errors"
 )
@@ -39,6 +40,15 @@ func (a *Entities) TaggingAddTagsToEntityWithContext(
 
 	if err := a.client.NerdGraphQueryWithContext(ctx, TaggingAddTagsToEntityMutation, vars, &resp); err != nil {
 		return nil, err
+	}
+
+	// If we got errors back, wrap them all up
+	if len(resp.TaggingAddTagsToEntityResult.Errors) > 0 {
+		errs := fmt.Errorf("query error")
+		for _, err := range resp.TaggingAddTagsToEntityResult.Errors {
+			errs = fmt.Errorf("%w; %s", errs, err.Description)
+		}
+		return nil, errs
 	}
 
 	return &resp.TaggingMutationResult, nil
@@ -93,6 +103,15 @@ func (a *Entities) TaggingDeleteTagFromEntityWithContext(
 		return nil, err
 	}
 
+	// If we got errors back, wrap them all up
+	if len(resp.TaggingDeleteTagFromEntityResult.Errors) > 0 {
+		errs := fmt.Errorf("query error")
+		for _, err := range resp.TaggingDeleteTagFromEntityResult.Errors {
+			errs = fmt.Errorf("%w; %s", errs, err.Description)
+		}
+		return nil, errs
+	}
+
 	return &resp.TaggingMutationResult, nil
 }
 
@@ -143,6 +162,15 @@ func (a *Entities) TaggingDeleteTagValuesFromEntityWithContext(
 
 	if err := a.client.NerdGraphQueryWithContext(ctx, TaggingDeleteTagValuesFromEntityMutation, vars, &resp); err != nil {
 		return nil, err
+	}
+
+	// If we got errors back, wrap them all up
+	if len(resp.TaggingDeleteTagValuesFromEntityResult.Errors) > 0 {
+		errs := fmt.Errorf("query error")
+		for _, err := range resp.TaggingDeleteTagValuesFromEntityResult.Errors {
+			errs = fmt.Errorf("%w; %s", errs, err.Description)
+		}
+		return nil, errs
 	}
 
 	return &resp.TaggingMutationResult, nil
@@ -197,6 +225,15 @@ func (a *Entities) TaggingReplaceTagsOnEntityWithContext(
 
 	if err := a.client.NerdGraphQueryWithContext(ctx, TaggingReplaceTagsOnEntityMutation, vars, &resp); err != nil {
 		return nil, err
+	}
+
+	// If we got errors back, wrap them all up
+	if len(resp.TaggingReplaceTagsOnEntityResult.Errors) > 0 {
+		errs := fmt.Errorf("query error")
+		for _, err := range resp.TaggingReplaceTagsOnEntityResult.Errors {
+			errs = fmt.Errorf("%w; %s", errs, err.Description)
+		}
+		return nil, errs
 	}
 
 	return &resp.TaggingMutationResult, nil
@@ -306,6 +343,20 @@ const getEntitiesQuery = `query(
 		violationId
 		violationUrl
 	}
+	relatedEntities {
+		nextCursor
+		results {
+			__typename
+			createdAt
+			type
+			... on EntityRelationshipDetectedEdge {
+				__typename
+			}
+			... on EntityRelationshipUserDefinedEdge {
+				__typename
+			}
+		}
+	}
 	relationships {
 		source {
 			accountId
@@ -389,6 +440,9 @@ const getEntitiesQuery = `query(
 			violationId
 			violationUrl
 		}
+		relatedEntities {
+			nextCursor
+		}
 		relationships {
 			type
 		}
@@ -427,6 +481,9 @@ const getEntitiesQuery = `query(
 			violationId
 			violationUrl
 		}
+		relatedEntities {
+			nextCursor
+		}
 		relationships {
 			type
 		}
@@ -460,6 +517,9 @@ const getEntitiesQuery = `query(
 			openedAt
 			violationId
 			violationUrl
+		}
+		relatedEntities {
+			nextCursor
 		}
 		relationships {
 			type
@@ -512,6 +572,9 @@ const getEntitiesQuery = `query(
 			violationId
 			violationUrl
 		}
+		relatedEntities {
+			nextCursor
+		}
 		relationships {
 			type
 		}
@@ -563,6 +626,9 @@ const getEntitiesQuery = `query(
 			violationId
 			violationUrl
 		}
+		relatedEntities {
+			nextCursor
+		}
 		relationships {
 			type
 		}
@@ -592,6 +658,9 @@ const getEntitiesQuery = `query(
 			violationId
 			violationUrl
 		}
+		relatedEntities {
+			nextCursor
+		}
 		relationships {
 			type
 		}
@@ -619,6 +688,9 @@ const getEntitiesQuery = `query(
 			openedAt
 			violationId
 			violationUrl
+		}
+		relatedEntities {
+			nextCursor
 		}
 		relationships {
 			type
@@ -649,6 +721,9 @@ const getEntitiesQuery = `query(
 			violationId
 			violationUrl
 		}
+		relatedEntities {
+			nextCursor
+		}
 		relationships {
 			type
 		}
@@ -677,6 +752,9 @@ const getEntitiesQuery = `query(
 			openedAt
 			violationId
 			violationUrl
+		}
+		relatedEntities {
+			nextCursor
 		}
 		relationships {
 			type
@@ -714,6 +792,9 @@ const getEntitiesQuery = `query(
 			openedAt
 			violationId
 			violationUrl
+		}
+		relatedEntities {
+			nextCursor
 		}
 		relationships {
 			type
@@ -767,6 +848,9 @@ const getEntitiesQuery = `query(
 			violationId
 			violationUrl
 		}
+		relatedEntities {
+			nextCursor
+		}
 		relationships {
 			type
 		}
@@ -795,6 +879,9 @@ const getEntitiesQuery = `query(
 			openedAt
 			violationId
 			violationUrl
+		}
+		relatedEntities {
+			nextCursor
 		}
 		relationships {
 			type
@@ -840,6 +927,9 @@ const getEntitiesQuery = `query(
 			violationId
 			violationUrl
 		}
+		relatedEntities {
+			nextCursor
+		}
 		relationships {
 			type
 		}
@@ -868,6 +958,9 @@ const getEntitiesQuery = `query(
 			violationId
 			violationUrl
 		}
+		relatedEntities {
+			nextCursor
+		}
 		relationships {
 			type
 		}
@@ -895,6 +988,9 @@ const getEntitiesQuery = `query(
 			openedAt
 			violationId
 			violationUrl
+		}
+		relatedEntities {
+			nextCursor
 		}
 		relationships {
 			type
@@ -930,6 +1026,9 @@ const getEntitiesQuery = `query(
 			openedAt
 			violationId
 			violationUrl
+		}
+		relatedEntities {
+			nextCursor
 		}
 		relationships {
 			type
@@ -1030,6 +1129,20 @@ const getEntityQuery = `query(
 		violationId
 		violationUrl
 	}
+	relatedEntities {
+		nextCursor
+		results {
+			__typename
+			createdAt
+			type
+			... on EntityRelationshipDetectedEdge {
+				__typename
+			}
+			... on EntityRelationshipUserDefinedEdge {
+				__typename
+			}
+		}
+	}
 	relationships {
 		source {
 			accountId
@@ -1113,6 +1226,9 @@ const getEntityQuery = `query(
 			violationId
 			violationUrl
 		}
+		relatedEntities {
+			nextCursor
+		}
 		relationships {
 			type
 		}
@@ -1151,6 +1267,9 @@ const getEntityQuery = `query(
 			violationId
 			violationUrl
 		}
+		relatedEntities {
+			nextCursor
+		}
 		relationships {
 			type
 		}
@@ -1184,6 +1303,9 @@ const getEntityQuery = `query(
 			openedAt
 			violationId
 			violationUrl
+		}
+		relatedEntities {
+			nextCursor
 		}
 		relationships {
 			type
@@ -1236,6 +1358,9 @@ const getEntityQuery = `query(
 			violationId
 			violationUrl
 		}
+		relatedEntities {
+			nextCursor
+		}
 		relationships {
 			type
 		}
@@ -1287,6 +1412,9 @@ const getEntityQuery = `query(
 			violationId
 			violationUrl
 		}
+		relatedEntities {
+			nextCursor
+		}
 		relationships {
 			type
 		}
@@ -1316,6 +1444,9 @@ const getEntityQuery = `query(
 			violationId
 			violationUrl
 		}
+		relatedEntities {
+			nextCursor
+		}
 		relationships {
 			type
 		}
@@ -1343,6 +1474,9 @@ const getEntityQuery = `query(
 			openedAt
 			violationId
 			violationUrl
+		}
+		relatedEntities {
+			nextCursor
 		}
 		relationships {
 			type
@@ -1373,6 +1507,9 @@ const getEntityQuery = `query(
 			violationId
 			violationUrl
 		}
+		relatedEntities {
+			nextCursor
+		}
 		relationships {
 			type
 		}
@@ -1401,6 +1538,9 @@ const getEntityQuery = `query(
 			openedAt
 			violationId
 			violationUrl
+		}
+		relatedEntities {
+			nextCursor
 		}
 		relationships {
 			type
@@ -1438,6 +1578,9 @@ const getEntityQuery = `query(
 			openedAt
 			violationId
 			violationUrl
+		}
+		relatedEntities {
+			nextCursor
 		}
 		relationships {
 			type
@@ -1491,6 +1634,9 @@ const getEntityQuery = `query(
 			violationId
 			violationUrl
 		}
+		relatedEntities {
+			nextCursor
+		}
 		relationships {
 			type
 		}
@@ -1519,6 +1665,9 @@ const getEntityQuery = `query(
 			openedAt
 			violationId
 			violationUrl
+		}
+		relatedEntities {
+			nextCursor
 		}
 		relationships {
 			type
@@ -1564,6 +1713,9 @@ const getEntityQuery = `query(
 			violationId
 			violationUrl
 		}
+		relatedEntities {
+			nextCursor
+		}
 		relationships {
 			type
 		}
@@ -1592,6 +1744,9 @@ const getEntityQuery = `query(
 			violationId
 			violationUrl
 		}
+		relatedEntities {
+			nextCursor
+		}
 		relationships {
 			type
 		}
@@ -1619,6 +1774,9 @@ const getEntityQuery = `query(
 			openedAt
 			violationId
 			violationUrl
+		}
+		relatedEntities {
+			nextCursor
 		}
 		relationships {
 			type
@@ -1654,6 +1812,9 @@ const getEntityQuery = `query(
 			openedAt
 			violationId
 			violationUrl
+		}
+		relatedEntities {
+			nextCursor
 		}
 		relationships {
 			type

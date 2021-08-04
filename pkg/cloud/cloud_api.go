@@ -3,6 +3,7 @@ package cloud
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/newrelic/newrelic-client-go/pkg/errors"
 )
@@ -39,6 +40,15 @@ func (a *Cloud) CloudConfigureIntegrationWithContext(
 
 	if err := a.client.NerdGraphQueryWithContext(ctx, CloudConfigureIntegrationMutation, vars, &resp); err != nil {
 		return nil, err
+	}
+
+	// If we got errors back, wrap them all up
+	if len(resp.CloudConfigureIntegrationResult.Errors) > 0 {
+		errs := fmt.Errorf("query error")
+		for _, err := range resp.CloudConfigureIntegrationResult.Errors {
+			errs = fmt.Errorf("%w; %s", errs, err.Description)
+		}
+		return nil, errs
 	}
 
 	return &resp.CloudConfigureIntegrationPayload, nil
@@ -805,6 +815,15 @@ func (a *Cloud) CloudDisableIntegrationWithContext(
 		return nil, err
 	}
 
+	// If we got errors back, wrap them all up
+	if len(resp.CloudDisableIntegrationResult.Errors) > 0 {
+		errs := fmt.Errorf("query error")
+		for _, err := range resp.CloudDisableIntegrationResult.Errors {
+			errs = fmt.Errorf("%w; %s", errs, err.Description)
+		}
+		return nil, errs
+	}
+
 	return &resp.CloudDisableIntegrationPayload, nil
 }
 
@@ -1569,6 +1588,15 @@ func (a *Cloud) CloudLinkAccountWithContext(
 		return nil, err
 	}
 
+	// If we got errors back, wrap them all up
+	if len(resp.CloudLinkAccountResult.Errors) > 0 {
+		errs := fmt.Errorf("query error")
+		for _, err := range resp.CloudLinkAccountResult.Errors {
+			errs = fmt.Errorf("%w; %s", errs, err.Description)
+		}
+		return nil, errs
+	}
+
 	return &resp.CloudLinkAccountPayload, nil
 }
 
@@ -1635,6 +1663,15 @@ func (a *Cloud) CloudRenameAccountWithContext(
 
 	if err := a.client.NerdGraphQueryWithContext(ctx, CloudRenameAccountMutation, vars, &resp); err != nil {
 		return nil, err
+	}
+
+	// If we got errors back, wrap them all up
+	if len(resp.CloudRenameAccountResult.Errors) > 0 {
+		errs := fmt.Errorf("query error")
+		for _, err := range resp.CloudRenameAccountResult.Errors {
+			errs = fmt.Errorf("%w; %s", errs, err.Description)
+		}
+		return nil, errs
 	}
 
 	return &resp.CloudRenameAccountPayload, nil
@@ -1705,6 +1742,15 @@ func (a *Cloud) CloudUnlinkAccountWithContext(
 
 	if err := a.client.NerdGraphQueryWithContext(ctx, CloudUnlinkAccountMutation, vars, &resp); err != nil {
 		return nil, err
+	}
+
+	// If we got errors back, wrap them all up
+	if len(resp.CloudUnlinkAccountResult.Errors) > 0 {
+		errs := fmt.Errorf("query error")
+		for _, err := range resp.CloudUnlinkAccountResult.Errors {
+			errs = fmt.Errorf("%w; %s", errs, err.Description)
+		}
+		return nil, errs
 	}
 
 	return &resp.CloudUnlinkAccountPayload, nil
